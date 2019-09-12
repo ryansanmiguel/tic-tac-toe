@@ -7,7 +7,8 @@ function Square(props) {
     return (
         <button
           className="square"
-          onClick={props.onClick}>
+          onClick={props.onClick}
+          style={{backgroundColor: props.color}}>
               {props.value}
         </button>
     );
@@ -24,6 +25,11 @@ class Board extends React.Component {
     
     handleClick(i) {
         const boardState = this.state.boardState.slice(); // array reference (not values) is constant
+        
+         // return early if game is already won or square is already played
+        if (determineWinner(boardState) || boardState[i]) return;
+        
+        // alternate players
         boardState[i] = this.state.xIsNext ? 'X' : 'O';
         this.setState({
           boardState: boardState,
@@ -32,9 +38,12 @@ class Board extends React.Component {
     }
     
     renderSquare(i, winner) {
+        const color = (winner !== null && winner.includes(i)) ? "#87a96b" : "white";
+        
         return (
             <Square
               value={this.state.boardState[i]}
+              color={color}
               onClick={() => this.handleClick(i)} />
         );
     }
@@ -44,17 +53,17 @@ class Board extends React.Component {
         
         return (
             <div className="board">
-                {this.renderSquare(0)}
-                {this.renderSquare(1)}
-                {this.renderSquare(2)}
+                {this.renderSquare(0, winner)}
+                {this.renderSquare(1, winner)}
+                {this.renderSquare(2, winner)}
 
-                {this.renderSquare(3)}
-                {this.renderSquare(4)}
-                {this.renderSquare(5)}
+                {this.renderSquare(3, winner)}
+                {this.renderSquare(4, winner)}
+                {this.renderSquare(5, winner)}
 
-                {this.renderSquare(6)}
-                {this.renderSquare(7)}
-                {this.renderSquare(8)}
+                {this.renderSquare(6, winner)}
+                {this.renderSquare(7, winner)}
+                {this.renderSquare(8, winner)}
             </div>
         );
     }
