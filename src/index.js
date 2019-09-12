@@ -16,13 +16,17 @@ function Square(props) {
 class Board extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { boardState: Array(9).fill(null) };
+        this.state = {
+            boardState: Array(9).fill(null),
+            xIsNext: true};
     }
     
     handleClick(i) {
         const boardState = this.state.boardState.slice(); // array reference (not values) is constant
-        boardState[i] = 'X';
-        this.setState({ boardState: boardState });
+        boardState[i] = this.state.xIsNext ? 'X' : 'O';
+        this.setState({
+          boardState: boardState,
+          xIsNext: !this.state.xIsNext});
     }
     
     renderSquare(i) {
