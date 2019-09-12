@@ -5,7 +5,9 @@ import "./index.css";
 class Square extends React.Component {
     render() {
         return (
-            <button className="square">
+            <button
+              className="square"
+              onClick={() => this.props.onClick()}>
                 {this.props.value}
             </button>
         );
@@ -13,8 +15,23 @@ class Square extends React.Component {
 }
 
 class Board extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { boardState: Array(9).fill(null) };
+    }
+    
+    handleClick(i) {
+        const boardState = this.state.boardState.slice(); // array reference (not values) is constant
+        boardState[i] = 'X';
+        this.setState({ boardState: boardState });
+    }
+    
     renderSquare(i) {
-        return <Square value={i}/>;
+        return (
+            <Square
+              value={this.state.boardState[i]}
+              onClick={() => this.handleClick(i)} />
+        );
     }
     
     render() {
